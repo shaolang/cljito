@@ -1,5 +1,4 @@
-# cljito
-
+# cljito [![Build Status](https://travis-ci.org/shaolang/cljito.png)](https://travis-ci.org/shaolang/cljito)
 cljito is a Mockito wrapper for Clojure.
 
 ## Usage
