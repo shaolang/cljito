@@ -22,3 +22,6 @@
   `(-> (Mockito/when (-> ~mocked ~action))
        ~behavior
        (.getMock)))
+
+(defmacro verify-> [mocked action]
+  `(-> (Mockito/verify ~mocked) ~action))
