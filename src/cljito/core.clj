@@ -1,5 +1,6 @@
 (ns cljito.core
-  (:import [org.mockito Mockito]))
+  (:import [org.mockito Mockito]
+           [org.mockito.verification VerificationMode]))
 
 (defn mock
   "Returns the Mockito-mocked object."
@@ -23,5 +24,17 @@
        ~behavior
        (.getMock)))
 
-(defmacro verify-> [mocked action]
-  `(-> (Mockito/verify ~mocked) ~action))
+(defonce never (Mockito/never))
+(defn times [n] (Mockito/times n))
+(defonce at-least-once (Mockito/atLeastOnce))
+(defn at-least [n] (Mockito/atLeast n))
+(defn at-most [n] (Mockito/atMost n))
+
+(defmacro verify->
+  ([mocked action]
+   `(-> (Mockito/verify ~mocked) ~action))
+  ([mocked counts action]
+   `(let [mode# (if (instance? VerificationMode ~counts)
+                    ~counts
+                    (times ~counts))]
+      (-> (Mockito/verify ~mocked mode#) ~action))))

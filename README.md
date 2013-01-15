@@ -23,9 +23,23 @@ most of your mocking needs.
     (when-> mocked-2 (.get 100) (.thenThrow (classes RuntimeException)))
     (.get mocked-2 100)   ; RuntimeException is thrown
 
+    ; the following four are equivalent
+    (verify-> mocked-2 (.get 100))
+    (verify-> mocked-2 1 (.get 100))
+    (verify-> mocked-2 (times 1) (.get 100))
+    (verify-> mocked-2 (Mockito/times 1) (.get 100))
+
+    (verify-> mocked-2 never (.get 0))
+
+    ; the following two are equivalent
+    (verify-> mocked-2 (at-least 2) (.get 100)) ; throws AssertionError
+    (verify-> mocked-2 (Mockito/atLeast 2) (.get 100))
+
 The code snippet above demonstrates that very little is
 cljito specific; `.thenReturn` and `.thenThrow` are really Mockito
-methods.
+methods. Despite that, cljito also provides helper functions (e.g.,
+`at-least`, `at-least`, `never`) to make calls to Mockito's static
+methods easier.
 
 cljito does not prescribe which version of Mockito you should use;
 you must specify Mockito's version in your project.clj dependencies.

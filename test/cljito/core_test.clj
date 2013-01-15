@@ -31,5 +31,14 @@
   (verify-> never-cleared (.clear))
   => (throws AssertionError)
 
+  (verify-> never-cleared never (.clear))
+  =not=> (throws AssertionError)
+
   (verify-> cleared-once (.clear))
-  =not=> (throws AssertionError))
+  =not=> (throws AssertionError)
+
+  (verify-> cleared-once 1 (.clear))
+  =not=> (throws AssertionError)
+
+  (verify-> cleared-once 2 (.clear))
+  => (throws AssertionError))
