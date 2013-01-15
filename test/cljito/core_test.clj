@@ -42,3 +42,10 @@
 
   (verify-> cleared-once 2 (.clear))
   => (throws AssertionError))
+
+(facts "argument matchers support"
+  (.get (when-> (mock List)
+                (.get (any-int))
+                (.thenReturn "argument matchers works"))
+        12345)
+  => "argument matchers works")
