@@ -65,3 +65,14 @@
                     ~counts
                     (times ~counts))]
       (-> (Mockito/verify ~mocked mode#) ~action))))
+
+(defmacro do-* [mock-fn outcome target action]
+  `(let [mocked# (-> (. Mockito ~mock-fn ~outcome) ~target)]
+     (-> mocked# ~action)
+     mocked#))
+
+(defmacro do-return [result target action]
+  `(do-* doReturn ~result ~target ~action))
+
+(defmacro do-throw [exception target action]
+  `(do-* doThrow ~exception ~target ~action))

@@ -49,3 +49,15 @@
                 (.thenReturn "argument matchers works"))
         12345)
   => "argument matchers works")
+
+(facts "support for do* stubbings"
+  (.get (do-return "it works"
+                   (.when (mock List))
+                   (.get 0))
+        0)
+  => "it works"
+
+  (.clear (do-throw (UnsupportedOperationException.)
+             (.when (mock List))
+             (.clear)))
+  => (throws UnsupportedOperationException))
