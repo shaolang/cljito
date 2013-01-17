@@ -7,6 +7,11 @@
   [klass]
   (Mockito/mock klass))
 
+(defn spy
+  "Returns the Mockito-spied (real) object."
+  [obj]
+  (Mockito/spy obj))
+
 (defn classes
   "Converts the list of given classes into a Java array,
    especially when Mockito's thenThrow method accepts 

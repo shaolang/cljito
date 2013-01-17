@@ -1,11 +1,15 @@
 (ns cljito.core-test
-  (:import [java.util List]
+  (:import [java.util ArrayList List]
            [org.mockito Mockito])
   (:use midje.sweet
         cljito.core))
 
 (fact "mocks are Mockito mocks"
   (.isMock (Mockito/mockingDetails (mock List))) => true)
+
+(fact "spies are Mockito spy"
+  (-> (Mockito/mockingDetails (spy (ArrayList.))) (.isSpy))
+  => true)
 
 (fact "mocks are stubbed, just like Java's"
   (.get (when-> (mock List)
