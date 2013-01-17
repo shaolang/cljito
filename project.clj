@@ -1,4 +1,4 @@
-(defproject cljito "0.1.0"
+(defproject cljito "0.2.0"
   :description "Mockito wrapper for Clojure"
   :url "https://github.com/shaolang/cljito"
   :license {:name "Eclipse Public License"
