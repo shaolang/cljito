@@ -22,7 +22,14 @@
                 (.get 0)
                 (.thenThrow (classes RuntimeException)))
         0)
-  => (throws RuntimeException))
+  => (throws RuntimeException)
+
+  (let [mock-list (when-> (mock List)
+                          (.get 0)
+                          (.thenReturn "first")
+                          (.thenReturn "second"))]
+    [(.get mock-list 0) (.get mock-list 0)])
+  => ["first" "second"])
 
 (facts "verify support"
   (against-background

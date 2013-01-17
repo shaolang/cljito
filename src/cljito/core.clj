@@ -23,10 +23,11 @@
   "Stubs the given mocked object. Returns the mocked object,
    making it very easy to create mocks in tests. For example:
   
-  (when-> (mock List) (.get 0) (.thenThrow (classes RuntimeException)))"
-  [mocked action behavior]
+  (when-> (mock List) (.get 0) (.thenThrow (classes RuntimeException)))
+  (when-> (mock List) (.get 1) (.thenReturn \"first\") (.thenReturn \"second\"))"
+  [mocked action & behaviors]
   `(-> (Mockito/when (-> ~mocked ~action))
-       ~behavior
+       ~@behaviors
        (.getMock)))
 
 (defonce never (Mockito/never))
