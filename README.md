@@ -65,7 +65,7 @@ you must specify Mockito's version in your project.clj dependencies.
 cljito works with:
 
 1. Clojure 1.3.0, and 1.5.0-RC1.
-1. Mockito 1.8.0, 1.9.0, and 1.9.5.
+1. Mockito 1.9.5.
 
 ## License
 
