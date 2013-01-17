@@ -81,3 +81,8 @@
 
 (defmacro do-throw [exception target action]
   `(do-* doThrow ~exception ~target ~action))
+
+(defmacro do-nothing [target action]
+  `(let [mocked# (-> (Mockito/doNothing) ~target)]
+     (-> mocked# ~action)
+     mocked#))

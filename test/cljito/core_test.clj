@@ -64,4 +64,10 @@
   (.clear (do-throw (UnsupportedOperationException.)
              (.when (mock List))
              (.clear)))
-  => (throws UnsupportedOperationException))
+  => (throws UnsupportedOperationException)
+
+  (let [spied-list (spy (ArrayList.))]
+    (.add spied-list "still around")
+    (do-nothing (.when spied-list) (.clear))
+    (.clear spied-list)
+    (.get spied-list 0)) => "still around")
