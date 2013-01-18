@@ -6,7 +6,7 @@ with as little changes as possible.
 
 ## Usage
 
-0n your `project.clj`, add the dev dependencies `[cljito "0.2.0"]`
+0n your `project.clj`, add the dev dependencies `[cljito "0.2.1"]`
 and `[org.mockito/mockito-all "1.9.5"]`,
 and you are all set to start using Mockito in your tests.
 
