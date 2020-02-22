@@ -14,15 +14,21 @@
 
 (defn classes
   "Converts the list of given classes into a Java array,
-   especially when Mockito's thenThrow method accepts 
+   especially when Mockito's thenThrow method accepts
    varargs."
   [& class-list]
   (into-array Class class-list))
 
+(defn throwables
+  "Converts the list of given throwables into a Java array,
+   useful for Mockito methods that expects throwables as varargs."
+  [& throwable-list]
+  (into-array Throwable throwable-list))
+
 (defmacro when->
   "Stubs the given mocked object. Returns the mocked object,
    making it very easy to create mocks in tests. For example:
-  
+
   (when-> (mock List) (.get 0) (.thenThrow (classes RuntimeException)))
   (when-> (mock List) (.get 1) (.thenReturn \"first\") (.thenReturn \"second\"))"
   [mocked action & behaviors]

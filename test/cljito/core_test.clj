@@ -18,7 +18,7 @@
 
     (.get (when-> (mock List)
                   (.get 0)
-                  (.thenThrow (classes RuntimeException)))
+                  (.thenThrow RuntimeException))
           0)
     =throws=> RuntimeException
 
@@ -77,7 +77,7 @@
           0)
     => "it works"
 
-    (.clear (do-throw (UnsupportedOperationException.)
+    (.clear (do-throw (throwables (UnsupportedOperationException.))
               (.when (mock List))
               (.clear)))
     =throws=> UnsupportedOperationException
