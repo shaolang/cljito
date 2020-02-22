@@ -6,8 +6,8 @@ with as little changes as possible.
 
 ## Usage
 
-0n your `project.clj`, add the dev dependencies `[cljito "0.2.1"]`
-and `[org.mockito/mockito-all "1.9.5"]`,
+In your `project.clj`, add the dev dependencies `[cljito "0.2.2"]`
+and `[org.mockito/mockito-core "3.3.0"]`,
 and you are all set to start using Mockito in your tests.
 
 The most important function to know is `when->`, the starting point of
@@ -24,7 +24,7 @@ most of your mocking needs.
     [(.get mocked 100) (.get mocked 100)] ; returns ["first" "second"]
 
     (def mocked-2 (mock List))
-    (when-> mocked-2 (.get 100) (.thenThrow (classes RuntimeException)))
+    (when-> mocked-2 (.get 100) (.thenThrow RuntimeException))
     (.get mocked-2 100)   ; RuntimeException is thrown
 
     ; the following four are equivalent
@@ -46,7 +46,9 @@ most of your mocking needs.
           0)    ; returns the "it works too" string
 
     ; RuntimeException is thrown
-    (.clear (do-throw (RuntimeException.) (.when (mock List)) (.clear)))
+    (.clear (do-throw (throwables (RuntimeException.))
+                      (.when (mock List))
+                      (.clear)))
 
     ; nothing is done
     (.add (do-nothing (.when (mock List)) (.add "not added")) "not added")
@@ -64,11 +66,12 @@ you must specify Mockito's version in your project.clj dependencies.
 
 cljito works with:
 
-1. Clojure 1.3.0, and 1.5.0-RC1.
 1. Mockito 1.9.5.
+2. Mockito 2.25.0.
+3. Mockito 3.3.0.
 
 ## License
 
-Copyright (c) 2013 Shaolang
+Copyright (c) 2020 Shaolang
 
 Distributed under the Eclipse Public License, the same as Clojure.
