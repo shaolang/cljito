@@ -10,4 +10,7 @@
              :1.9.5   {:dependencies [[org.mockito/mockito-all  "1.9.5"]]}}
 
   :aliases {"all" ["with-profile"
-                   "dev:dev,2.25.0:dev,1.9.5"]})
+                   "dev:dev,2.25.0:dev,1.9.5"]}
+
+  :scm {:name "git"
+        :url  "https://github.com/shaolang/cljito"})
