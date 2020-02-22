@@ -1,80 +1,89 @@
 (ns cljito.core-test
+  (:require [cljito.core :refer :all]
+            [clojure.test :refer [deftest]]
+            [testit.core :refer [fact facts]])
   (:import [java.util ArrayList List]
-           [org.mockito Mockito])
-  (:use midje.sweet
-        cljito.core))
+           [org.mockito Mockito]))
 
-(fact "mocks are Mockito mocks"
-  (.isMock (Mockito/mockingDetails (mock List))) => true)
+(deftest mock-tests
+  (fact "mocks are Mockito mocks"
+    (.isMock (Mockito/mockingDetails (mock List))) => true)
 
-(fact "spies are Mockito spy"
-  (-> (Mockito/mockingDetails (spy (ArrayList.))) (.isSpy))
-  => true)
+  (facts "mocks are stubbed, just like Java's"
+    (.get (when-> (mock List)
+                  (.get 0)
+                  (.thenReturn "it works"))
+          0)
+    => "it works"
 
-(fact "mocks are stubbed, just like Java's"
-  (.get (when-> (mock List)
-                (.get 0)
-                (.thenReturn "it works"))
-        0)
-  => "it works"
+    (.get (when-> (mock List)
+                  (.get 0)
+                  (.thenThrow (classes RuntimeException)))
+          0)
+    =throws=> RuntimeException
 
-  (.get (when-> (mock List)
-                (.get 0)
-                (.thenThrow (classes RuntimeException)))
-        0)
-  => (throws RuntimeException)
+    (let [mock-list (when-> (mock List)
+                            (.get 0)
+                            (.thenReturn "first")
+                            (.thenReturn "second"))]
+      [(.get mock-list 0) (.get mock-list 0)])
+    => ["first" "second"]))
 
-  (let [mock-list (when-> (mock List)
-                          (.get 0)
-                          (.thenReturn "first")
-                          (.thenReturn "second"))]
-    [(.get mock-list 0) (.get mock-list 0)])
-  => ["first" "second"])
 
-(facts "verify support"
-  (against-background
-    (around :checks
-            (let [cleared-once (mock List)
-                  never-cleared (mock List)]
-              (.clear cleared-once)
-              ?form)))
+(deftest spy-tests
+  (fact "spies are Mockito spy"
+    (-> (Mockito/mockingDetails (spy (ArrayList.))) (.isSpy))
+    => true))
 
-  (verify-> never-cleared (.clear))
-  => (throws AssertionError)
 
-  (verify-> never-cleared never (.clear))
-  =not=> (throws AssertionError)
+(deftest verify-support-tests
+  (let [never-cleared (mock List)]
+    (facts
+      (verify-> never-cleared (.clear))
+      =throws=> AssertionError
 
-  (verify-> cleared-once (.clear))
-  =not=> (throws AssertionError)
+      (verify-> never-cleared never (.clear))
+      => nil))
 
-  (verify-> cleared-once 1 (.clear))
-  =not=> (throws AssertionError)
 
-  (verify-> cleared-once 2 (.clear))
-  => (throws AssertionError))
+  (let [cleared-once (mock List)]
+    (.clear cleared-once)
 
-(facts "argument matchers support"
-  (.get (when-> (mock List)
-                (.get (any-int))
-                (.thenReturn "argument matchers works"))
-        12345)
-  => "argument matchers works")
+    (facts
+      (verify-> cleared-once (.clear))
+      => nil
 
-(facts "support for do* stubbings"
-  (.get (do-return "it works"
-                   (.when (mock List))
-                   (.get 0))
-        0)
-  => "it works"
+      (verify-> cleared-once 1 (.clear))
+      => nil
 
-  (.clear (do-throw (UnsupportedOperationException.)
-             (.when (mock List))
-             (.clear)))
-  => (throws UnsupportedOperationException)
+      (verify-> cleared-once 2 (.clear))
+      =throws=> AssertionError)))
 
-  (let [spied-list (spy (ArrayList.))]
-    (.add spied-list "still around")
-    (do-nothing (.when spied-list) (.clear))
-    (.clear spied-list)
-    (.get spied-list 0)) => "still around")
+
+(deftest argument-matcher-support-tests
+  (facts "argument matchers support"
+    (.get (when-> (mock List)
+                  (.get (any-int))
+                  (.thenReturn "argument matchers works"))
+          12345)
+    => "argument matchers works"))
+
+
+(deftest do-*-stubbing-tests
+  (facts "support for do* stubbings"
+    (.get (do-return "it works"
+            (.when (mock List))
+            (.get 0))
+          0)
+    => "it works"
+
+    (.clear (do-throw (UnsupportedOperationException.)
+              (.when (mock List))
+              (.clear)))
+    =throws=> UnsupportedOperationException
+
+    (let [spied-list (spy (ArrayList.))]
+      (.add spied-list "still around")
+      (do-nothing (.when spied-list) (.clear))
+      (.clear spied-list)
+      (.get spied-list 0)) => "still around"))
