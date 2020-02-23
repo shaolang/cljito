@@ -1,4 +1,4 @@
-# cljito [![Build Status](https://travis-ci.org/shaolang/cljito.png)](https://travis-ci.org/shaolang/cljito)
+# cljito [![Build Status](https://travis-ci.org/shaolang/cljito.png)](https://travis-ci.org/shaolang/cljito) [![Clojars Project](https://img.shields.io/clojars/v/cljito.svg)](https://clojars.org/cljito)
 cljito is a Mockito wrapper for Clojure. Unlike the other libraries,
 cljito aims to be a super-thin wrapper over Mockito, so that
 cljito can (hopefully) support Mockito's bells and whistles
@@ -6,7 +6,7 @@ with as little changes as possible.
 
 ## Usage
 
-In your `project.clj`, add the dev dependencies `[cljito "0.2.2"]`
+In your `project.clj`, add the dev dependencies `[cljito "0.2.3"]`
 and `[org.mockito/mockito-core "3.3.0"]`,
 and you are all set to start using Mockito in your tests.
 
